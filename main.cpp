@@ -1,6 +1,9 @@
-#include "Test.cpp"
+#include <iostream>
 
-
+#include "Vector/Vector.h"       
+#include "Task/Task.h"
+#include "Solving_Metod/Solving_Metod.h"  
+#include "Test/Test.h"    
 
 
 int main(){
