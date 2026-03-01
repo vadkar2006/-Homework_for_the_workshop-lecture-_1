@@ -4,7 +4,7 @@
 
 template <class Metod>
 void Solve_Backpack_Problem(std::string input){
-    std::string way("C:/C++/Homework 2/Sheb_Homework_1/Data/data_1/");
+    std::string way("Data/data_1/");
 
     std::ifstream file(way + input);
     if(!file.is_open()){
