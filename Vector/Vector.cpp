@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "Vector.h"
 
 Vector::Vector(int n, int q){
@@ -36,7 +37,7 @@ Vector::Vector(const Vector& vec){
 void Vector::Print(){
     //std::cout << "Lenght: " << this -> Len() << std::endl;
     for(int i = 0; i < this -> Len(); i++)
-        std::cout << this -> vector[i];
+        std::cout << this -> vector[i] << " ";
     std::cout << std::endl;
 }
 

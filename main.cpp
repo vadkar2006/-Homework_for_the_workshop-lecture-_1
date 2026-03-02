@@ -102,6 +102,7 @@ int main(){
 
     exercise.Solve(Solving_Metod::Hill_Climbing);
 
+
     return 0;
 }
 

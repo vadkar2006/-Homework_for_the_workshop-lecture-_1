@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cmath>
+
 #include "Task.h"
 
 
@@ -14,22 +16,15 @@ bool Backpack::Input(std::ifstream input){
     if(!input.is_open())
         return false;
     
-    if((Items[0]) && (Items[1])){
-        delete[] Items[0];
-        delete[] Items[1];
-
-        Items[0] = nullptr;
-        Items[1] = nullptr;
-    }
-
-    if(Items[0])
-        delete[] Items[0];
-    
-    if(Items[1])
-        delete[] Items[1];
-    
-    if(Items)
+    if(Items){
+        if(Items[0])
+            delete[] Items[0];
+        
+        if(Items[1])
+            delete[] Items[1];
+        
         delete[] Items;
+    }
     
     input >> this -> Count_Items >> this -> Max_Volume;
 
@@ -64,7 +59,8 @@ Backpack::Backpack(std::ifstream& file){
     for(int i = 0; i < this -> Count_Items; i++)
         file >> Items[0][i] >> Items[1][i];
 }
-int Backpack::Volume_Finction(Vector& items_vector) const{
+
+int Backpack::Volume_Finction(const Vector& items_vector) const{
     int w = 0;
 
     for(int i = 0; i < this -> Count_Items; i++)
@@ -73,7 +69,7 @@ int Backpack::Volume_Finction(Vector& items_vector) const{
     
     return w;
 }
-int Backpack::Cost_Finction(Vector& items_vector) const{
+int Backpack::Cost_Finction(const Vector& items_vector) const{
     int cost = 0;
     int volume = 0;
 
@@ -102,4 +98,120 @@ Vector Backpack::Solve(Vector (&f)(const Backpack&, const Vector&), const Vector
 }
 Vector Backpack::Solve(Vector (&f)(const Backpack&, const Vector&)) const{
     return this -> Solve(f, Vector(this -> Get_Count_Items()));
+}
+
+
+Backpack::~Backpack(){
+    if(!Items)
+        return;
+    
+    if(Items[0])
+        delete[] Items[0];
+    
+    if(Items[1])
+        delete[] Items[1];
+    
+    delete[] Items;
+}
+
+
+
+
+
+void TSP::Print() const{
+    std::cout << "Count_Point: " << this -> Count_Point << std::endl;
+
+    for(int i = 0; i < this -> Count_Point; i++)
+        std::cout << Coordinates[0][i] << " " << Coordinates[1][i] << std::endl;
+    std::cout << std::endl;
+}
+bool TSP::Input(std::ifstream input){
+    if(!input.is_open())
+        return false;
+    
+    if(Coordinates){
+        if(Coordinates[0])
+            delete[] Coordinates[0];
+        
+        if(Coordinates[1])
+            delete[] Coordinates[1];
+        
+        delete[] Coordinates;
+    }
+    
+    input >> this -> Count_Point;
+
+    Coordinates = new int*[2];
+    Coordinates[0] = new int[this -> Count_Point];
+    Coordinates[1] = new int[this -> Count_Point];
+
+    for(int i = 0; i < this -> Count_Point; i++)
+        input >> Coordinates[0][i] >> Coordinates[1][i];
+    
+    return true;
+}
+
+
+TSP::TSP(std::istream& console){
+    console >> this -> Count_Point;
+
+    Coordinates = new int*[2];
+    Coordinates[0] = new int[this -> Count_Point];
+    Coordinates[1] = new int[this -> Count_Point];
+
+    for(int i = 0; i < this -> Count_Point; i++)
+        console >> Coordinates[0][i] >> Coordinates[1][i];
+}
+TSP::TSP(std::ifstream& file){
+    file >> this -> Count_Point;
+
+    Coordinates = new int*[2];
+    Coordinates[0] = new int[this -> Count_Point];
+    Coordinates[1] = new int[this -> Count_Point];
+
+    for(int i = 0; i < this -> Count_Point; i++)
+        file >> Coordinates[0][i] >> Coordinates[1][i];
+}
+
+
+double TSP::Cost_Finction(const Vector& coord_vector) const{
+    double lin = 0;
+
+    for(int i = 0; i < coord_vector.Dim() - 1; i++){
+        double x = (Coordinates[0][coord_vector[i]] - Coordinates[0][coord_vector[i+1]]);
+        double y = (Coordinates[1][coord_vector[i]] - Coordinates[1][coord_vector[i+1]]);
+        
+        lin += std::sqrt(x*x + y*y);
+    }
+
+    return lin;
+}
+
+
+Vector TSP::Solve(Vector (&f)(const TSP&, const Vector&), const Vector& start) const{
+    Vector total = f(*this, start);
+    
+
+    std::cout << "Length: " << this -> Cost_Finction(total) << std::endl;
+    std::cout << "Vector_Things: ";
+    total.Print();
+
+    return total;
+}
+Vector TSP::Solve(Vector (&f)(const TSP&, const Vector&)) const{
+    return this -> Solve(f, Vector(this -> Get_Count_Point()));
+}
+
+
+TSP::~TSP(){
+    if(!Coordinates)
+        return;
+    
+    if(Coordinates[0])
+        delete[] Coordinates[0];
+    
+    if(Coordinates[1])
+        delete[] Coordinates[1];
+    
+    delete[] Coordinates;
 }
