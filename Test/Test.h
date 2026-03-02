@@ -9,8 +9,8 @@
 
 
 
-template <class Metod>
-void Solve_Backpack_Problem(std::string input){
+
+inline void Solve_Backpack_Problem(std::string input, Vector (&f)(const Backpack&, const Vector&)){
     std::string way("../Data/data_1/");
 
     std::ifstream file(way + input);
@@ -18,15 +18,8 @@ void Solve_Backpack_Problem(std::string input){
         std::cout << "Not Open file " << input << " for way " << way + input << std::endl;
         return;
     }
-    Metod solve;
+
     Backpack quest(file);
 
-    int dim = quest.Get_Count_Items();
-
-    int mas[] = {1, 0, 1, 0};
-    Vector start(4, mas);
-
-    Vector resh = solve.Gradient_Descent_Max(quest, start);
-
-    resh.Print();
+    Vector resh = quest.Solve(f);
 }

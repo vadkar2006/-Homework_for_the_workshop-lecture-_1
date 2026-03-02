@@ -44,6 +44,16 @@ bool Backpack::Input(std::ifstream input){
 }
 
 
+Backpack::Backpack(std::istream& console){
+    console >> this -> Count_Items >> this -> Max_Volume;
+
+    Items = new int*[2];
+    Items[0] = new int[this -> Count_Items];
+    Items[1] = new int[this -> Count_Items];
+
+    for(int i = 0; i < this -> Count_Items; i++)
+        console >> Items[0][i] >> Items[1][i];
+}
 Backpack::Backpack(std::ifstream& file){
     file >> this -> Count_Items >> this -> Max_Volume;
 
@@ -53,6 +63,15 @@ Backpack::Backpack(std::ifstream& file){
 
     for(int i = 0; i < this -> Count_Items; i++)
         file >> Items[0][i] >> Items[1][i];
+}
+int Backpack::Volume_Finction(Vector& items_vector) const{
+    int w = 0;
+
+    for(int i = 0; i < this -> Count_Items; i++)
+        if(items_vector[i] != 0)
+            w += this -> Items[1][i];
+    
+    return w;
 }
 int Backpack::Cost_Finction(Vector& items_vector) const{
     int cost = 0;
@@ -67,4 +86,20 @@ int Backpack::Cost_Finction(Vector& items_vector) const{
     if(volume > Max_Volume)
         return -1;
     return cost;
+}
+
+
+Vector Backpack::Solve(Vector (&f)(const Backpack&, const Vector&), const Vector& start) const{
+    Vector total = f(*this, start);
+    
+
+    std::cout << "Benefit: " << this -> Cost_Finction(total) << std::endl;
+    std::cout << this -> Volume_Finction(total) << " of " << Max_Volume << " weights used" << std::endl;
+    std::cout << "Vector_Things: ";
+    total.Print();
+
+    return total;
+}
+Vector Backpack::Solve(Vector (&f)(const Backpack&, const Vector&)) const{
+    return this -> Solve(f, Vector(this -> Get_Count_Items()));
 }

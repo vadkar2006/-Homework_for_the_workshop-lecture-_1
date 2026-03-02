@@ -22,8 +22,11 @@ Vector::Vector(Vector&& vec) noexcept {
     vec.vector = nullptr;
 }
 Vector::Vector(const Vector& vec){
-    if ((vec.len > 0) && vec.vector)
-        len = vec.len;
+    if (!((vec.len > 0) && vec.vector))
+        return;
+
+    len = vec.len;
+    vector = new int[len];
 
     for(int i = 0; i < len; i++)
         vector[i] = vec.vector[i];
@@ -31,7 +34,7 @@ Vector::Vector(const Vector& vec){
 
 
 void Vector::Print(){
-    std::cout << "Lenght: " << this -> Len() << std::endl;
+    //std::cout << "Lenght: " << this -> Len() << std::endl;
     for(int i = 0; i < this -> Len(); i++)
         std::cout << this -> vector[i];
     std::cout << std::endl;
