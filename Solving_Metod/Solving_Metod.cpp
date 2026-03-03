@@ -127,7 +127,13 @@ Vector Solving_Metod::Best_Improvement::_3_Optimization (const TSP& quest, const
     return total;
 }
 
+Vector Solving_Metod::Best_Improvement::_2_3_Optimization(const TSP& quest, const Vector& start){
+    Vector first = Solving_Metod::Best_Improvement::_2_Optimization(quest, start);
 
+    Vector end = Solving_Metod::Best_Improvement::_3_Optimization(quest, first);
+
+    return end;
+}
 
 
 Vector Solving_Metod::First_Improvement::_3_Optimization (const TSP& quest, const Vector& start){

@@ -14,6 +14,8 @@ namespace Solving_Metod{
 
         Vector _2_Optimization (const TSP& quest, const Vector& start);
         Vector _3_Optimization (const TSP& quest, const Vector& start);
+
+        Vector _2_3_Optimization (const TSP& quest, const Vector& start);
     }
 
     namespace First_Improvement{
