@@ -183,6 +183,11 @@ double TSP::Cost_Finction(const Vector& coord_vector) const{
         
         lin += std::sqrt(x*x + y*y);
     }
+    int k = coord_vector.Dim() - 1;
+    double x = (Coordinates[0][coord_vector[k]] - Coordinates[0][coord_vector[0]]);
+    double y = (Coordinates[1][coord_vector[k]] - Coordinates[1][coord_vector[0]]);
+    
+    lin += std::sqrt(x*x + y*y);
 
     return lin;
 }
@@ -199,7 +204,7 @@ Vector TSP::Solve(Vector (&f)(const TSP&, const Vector&), const Vector& start) c
     return total;
 }
 Vector TSP::Solve(Vector (&f)(const TSP&, const Vector&)) const{
-    return this -> Solve(f, Vector(this -> Get_Count_Point()));
+    return this -> Solve(f, Vector(this -> Get_Count_Point(), "range"));
 }
 
 

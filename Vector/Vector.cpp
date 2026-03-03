@@ -11,6 +11,12 @@ Vector::Vector(int n, int q){
             vector[i] = q;
     }
 }
+Vector::Vector(int n, std::string wat): Vector(n){
+    if(wat != "range")
+        return;
+    for(int i = 0; i < len; i++)
+        vector[i] = i;
+}
 Vector::Vector(int len1, int* vec){
     if ((len1 > 0) && vec){
         len = len1;
@@ -34,11 +40,41 @@ Vector::Vector(const Vector& vec){
 }
 
 
-void Vector::Print(){
+void Vector::Print() const{
     //std::cout << "Lenght: " << this -> Len() << std::endl;
     for(int i = 0; i < this -> Len(); i++)
         std::cout << this -> vector[i] << " ";
     std::cout << std::endl;
+}
+
+
+Vector Vector::Slice(int start, int end, bool inversion) const{
+    if(end <= start)
+        return Vector();
+
+    int new_len = end - start;
+    Vector slic(new_len);
+
+    if(!inversion)
+        for(int i = 0; i < new_len; i++)
+            slic[i] = vector[i + start];
+
+    else
+        for(int i = 0; i < new_len; i++)
+            slic[i] = vector[end - i - 1];
+    
+    return slic;
+}
+Vector Vector::Concatenation(const Vector& vec1) const{
+    Vector con(len + vec1.len);
+
+    for(int i = 0; i < len; i++)
+        con[i] = vector[i];
+    
+    for(int i = 0; i < vec1.len; i++)
+        con[len + i] = vec1[i];
+    
+    return con;
 }
 
 int& Vector::operator[] (int i){

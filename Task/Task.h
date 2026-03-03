@@ -14,7 +14,7 @@ class Task{
 public:
     //virtual int Cost_Finction(Vector& items_vector) const = 0;
     virtual bool Input(std::ifstream input) = 0;
-    virtual Vector Solve(Vector (&f)(const Backpack&, const Vector&), const Vector& start) const = 0;
+    //virtual Vector Solve(Vector (&f)(const Backpack&, const Vector&), const Vector& start) const = 0;
 
     virtual ~Task(){};
 };
@@ -56,6 +56,10 @@ public:
     TSP(std::ifstream& file);
 
     int Get_Count_Point() const{return Count_Point;}
+
+    int X(int i) const{return Coordinates[0][i];}
+    int Y(int i) const{return Coordinates[1][i];}
+
 
     double Cost_Finction(const Vector& coord_vector) const;
 
