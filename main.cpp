@@ -94,23 +94,23 @@ void Test_Data_Backpack(){
 
 void Test_Data_TSP(){
     std::cout << "Problem 1" << std::endl;
-    Solve_TSP_Problem("tsp_51_1", Solving_Metod::Best_Improvement::_2_Optimization);
+    Solve_TSP_Problem("tsp_100_1", Solving_Metod::Best_Improvement::_2_Optimization);
     std::cout << std::endl;
-    Solve_TSP_Problem("tsp_51_1", Solving_Metod::Best_Improvement::_3_Optimization);
+    Solve_TSP_Problem("tsp_100_1", Solving_Metod::Best_Improvement::_2_3_Optimization);
     std::cout << std::endl << std::endl;
-/*
+
     std::cout << "Problem 2" << std::endl;
-    Solve_TSP_Problem("tsp_70_1", Solving_Metod::_2_Optimization);
+    Solve_TSP_Problem("tsp_70_1", Solving_Metod::Best_Improvement::_2_Optimization);
     std::cout << std::endl;
-    Solve_TSP_Problem("tsp_70_1", Solving_Metod::_3_Optimization);
+    Solve_TSP_Problem("tsp_70_1", Solving_Metod::Best_Improvement::_2_3_Optimization);
     std::cout << std::endl << std::endl;
 
     std::cout << "Problem 3" << std::endl;
-    Solve_TSP_Problem("tsp_99_1", Solving_Metod::_2_Optimization);
+    Solve_TSP_Problem("tsp_99_1", Solving_Metod::Best_Improvement::_2_Optimization);
     std::cout << std::endl;
-    Solve_TSP_Problem("tsp_99_1", Solving_Metod::_3_Optimization);
+    Solve_TSP_Problem("tsp_99_1", Solving_Metod::Best_Improvement::_2_3_Optimization);
     std::cout << std::endl << std::endl;
-
+/*
     std::cout << "Problem 4" << std::endl;
     Solve_TSP_Problem("tsp_100_1", Solving_Metod::_2_Optimization);
     std::cout << std::endl;
@@ -123,7 +123,9 @@ void Test_Data_TSP(){
 
 
 int main(){
+    Test_Data_Backpack();
 
+    Test_Data_TSP();
 
 
     return 0;
