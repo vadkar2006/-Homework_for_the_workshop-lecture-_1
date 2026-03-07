@@ -124,10 +124,14 @@ void Test_Data_TSP(){
 
 int main(){
     Test_Data_Backpack();
-
+/*
     Test_Data_TSP();
 
+    std::ifstream file;
+    file.open("../Data/data_1/ks_500_0");
+    Backpack q(file);
 
+    q.Solve(Solving_Metod::Best_Improvement::Hill_Climbing, Vector(q.Get_Count_Items(), 1));*/
     return 0;
 }
 

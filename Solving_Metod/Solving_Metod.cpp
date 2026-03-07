@@ -11,24 +11,27 @@ Vector Solving_Metod::Best_Improvement::Hill_Climbing (const Backpack& quest, co
 
     bool flag = true;
     while (flag){
-        std::vector<Vector> next(total.Dim(), total);
+        int best_index = -1;
+        int best_cost = total_cost;
 
-        for(int i = 0; i < total.Dim(); i++)
-            next[i][i] = !next[i][i];
+        for(int i = 0; i < total.Dim(); i++){
+            total[i] = !total[i];
+
+            int new_cost = quest.Cost_Finction(total);
         
-        
-        std::vector<int> next_cost(total.Dim());
-        for(int i = 0; i < total.Dim(); i++)
-            next_cost[i] = quest.Cost_Finction(next[i]);
-        
-        std::vector<int>::iterator max_it = std::max_element(next_cost.begin(), next_cost.end()); 
-        size_t index = std::distance(next_cost.begin(), max_it);
-        
-        if(*max_it <= total_cost)
+            if(new_cost > best_cost){
+                best_index = i;
+                best_cost = new_cost;
+            }
+
+            total[i] = !total[i];
+        }
+
+        if(best_index == -1)
             flag = false;
         else{
-            total = next[index];
-            total_cost = quest.Cost_Finction(total);
+            total[best_index] = !total[best_index];
+            total_cost = best_cost;
         }
     }
 
