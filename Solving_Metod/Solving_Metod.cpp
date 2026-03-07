@@ -47,7 +47,9 @@ Vector Solving_Metod::Best_Improvement::_2_Optimization (const TSP& quest, const
 
     bool flag = true;
     while (flag){
-        std::vector<Vector> next;
+        bool best = false;
+        double best_cost = total_cost;
+        Vector best_total;
 
         for(int i = 0; i < total.Dim() - 1; i++)
             for(int j = i + 2; j < total.Dim(); j++){
@@ -56,21 +58,20 @@ Vector Solving_Metod::Best_Improvement::_2_Optimization (const TSP& quest, const
                 Vector third = total.Slice(j, total.Dim());
 
                 Vector new_total = first.Concatenation(second.Concatenation(third));
-                next.push_back(new_total);
+                double new_cost = quest.Cost_Finction(new_total);
+
+                if(new_cost < best_cost){
+                    best = true;
+                    best_cost = new_cost;
+                    best_total = new_total;
+                }
             }
-                
-        std::vector<double> next_cost(next.size());
-        for(int i = 0; i < next.size(); i++)
-            next_cost[i] = quest.Cost_Finction(next[i]);
         
-        std::vector<double>::iterator min_it = std::min_element(next_cost.begin(), next_cost.end()); 
-        size_t index = std::distance(next_cost.begin(), min_it);
-        
-        if(*min_it >= total_cost)
+        if(!best)
             flag = false;
         else{
-            total = next[index];
-            total_cost = quest.Cost_Finction(total);
+            total = best_total;
+            total_cost = best_cost;
         }
     }
 
@@ -85,7 +86,9 @@ Vector Solving_Metod::Best_Improvement::_3_Optimization (const TSP& quest, const
 
     bool flag = true;
     while (flag){
-        std::vector<Vector> next;
+        bool best = false;
+        double best_cost = total_cost;
+        Vector best_total;
 
         for(int i = 0; i < total.Dim(); i++)
             for(int j = i + 2; j < total.Dim(); j++)
@@ -105,25 +108,44 @@ Vector Solving_Metod::Best_Improvement::_3_Optimization (const TSP& quest, const
                     Vector new_total_4 = first.Concatenation(third_inv.Concatenation(second.Concatenation(fourth)));
                     Vector new_total_5 = first.Concatenation(third.Concatenation(second_inv.Concatenation(fourth)));
 
-                    next.push_back(new_total_1);
-                    next.push_back(new_total_2);
-                    next.push_back(new_total_3);
-                    next.push_back(new_total_4);
-                    next.push_back(new_total_5);
+                    double new_cost_1 = quest.Cost_Finction(new_total_1);
+                    double new_cost_2 = quest.Cost_Finction(new_total_2);
+                    double new_cost_3 = quest.Cost_Finction(new_total_3);
+                    double new_cost_4 = quest.Cost_Finction(new_total_4);
+                    double new_cost_5 = quest.Cost_Finction(new_total_5);
+
+                    if(new_cost_1 < best_cost){
+                        best = true;
+                        best_cost = new_cost_1;
+                        best_total = new_total_1;
+                    }
+                    if(new_cost_2 < best_cost){
+                        best = true;
+                        best_cost = new_cost_2;
+                        best_total = new_total_2;
+                    }
+                    if(new_cost_3 < best_cost){
+                        best = true;
+                        best_cost = new_cost_3;
+                        best_total = new_total_3;
+                    }
+                    if(new_cost_4 < best_cost){
+                        best = true;
+                        best_cost = new_cost_4;
+                        best_total = new_total_4;
+                    }
+                    if(new_cost_5 < best_cost){
+                        best = true;
+                        best_cost = new_cost_5;
+                        best_total = new_total_5;
+                    }
                 }
-                
-        std::vector<double> next_cost(next.size());
-        for(int i = 0; i < next.size(); i++)
-            next_cost[i] = quest.Cost_Finction(next[i]);
         
-        std::vector<double>::iterator min_it = std::min_element(next_cost.begin(), next_cost.end()); 
-        size_t index = std::distance(next_cost.begin(), min_it);
-        
-        if(*min_it >= total_cost)
+        if(!best)
             flag = false;
         else{
-            total = next[index];
-            total_cost = quest.Cost_Finction(total);
+            total = best_total;
+            total_cost = best_cost;
         }
     }
 
