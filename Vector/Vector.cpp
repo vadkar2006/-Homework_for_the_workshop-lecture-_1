@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 
 #include "Vector.h"
 
@@ -26,7 +27,9 @@ Vector::Vector(int len1, int* vec){
 Vector::Vector(Vector&& vec) noexcept {
     len = vec.len;
     vector = vec.vector;
+
     vec.vector = nullptr;
+    vec.len = 0;
 }
 Vector::Vector(const Vector& vec){
     if (!((vec.len > 0) && vec.vector))
@@ -76,6 +79,26 @@ Vector Vector::Concatenation(const Vector& vec1) const{
     
     return con;
 }
+void Vector::Random_Binary(double Percentage_Units){
+    std::uniform_int_distribution<> dist_int(0, 1000000);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    Percentage_Units *= 10000; 
+
+    if(!vector) 
+        return;
+
+    for(int i = 0; i < len; i++)
+        vector[i] = dist_int(gen);
+    
+    for(int i = 0; i < len; i++){
+        if(vector[i] <= Percentage_Units)
+            vector[i] = 0;
+        else
+            vector[i] = 1;
+    }
+}
 
 int& Vector::operator[] (int i){
     return vector[i];
@@ -91,6 +114,7 @@ bool Vector::operator = (const Vector& vec){
     
     if(vector)
         delete[] vector;
+    vector = nullptr;
 
     len = vec.len;
     vector = new int[len];

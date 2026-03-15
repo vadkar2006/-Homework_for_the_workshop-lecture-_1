@@ -1,4 +1,6 @@
 #include <iostream>
+#include <thread>
+#include <random>
 
 #include "Solving_Metod.h"
 
@@ -223,3 +225,59 @@ Vector Solving_Metod::First_Improvement::_3_Optimization (const TSP& quest, cons
 
 
 
+
+Vector Solving_Metod::Parallel_Random_Start::Hill_Climbing(const Backpack& quest, const Vector& start){
+    std::vector<Vector> starts (Solving_Metod::Count_Parallel_Stream, Vector(quest.Get_Count_Items()));
+    std::vector<Vector> ans (Solving_Metod::Count_Parallel_Stream);
+    std::vector<int> costs (Solving_Metod::Count_Parallel_Stream);
+
+    starts[0] = start;
+
+    double min_vol_count = double(quest.Get_Max_Volume()) / double(quest.Y(quest.Max_Volume_Item_Index()));
+    double max_vol_count = double(quest.Get_Max_Volume()) / double(quest.Y(quest.Min_Volume_Item_Index()));
+
+    long sum = 0;
+    for(int i = 0; i < quest.Get_Count_Items(); i++)
+        sum += quest.Y(i);
+    
+    double average_count = double(quest.Get_Max_Volume()) / (sum / double(quest.Get_Count_Items()));
+
+    double percent_min = min_vol_count / quest.Get_Count_Items() * 100;
+    double percent_ave = average_count / quest.Get_Count_Items() * 100;
+    double percent_max = max_vol_count / quest.Get_Count_Items() * 100;
+
+    if(percent_max > 100)
+        percent_max = 100;
+
+
+    std::normal_distribution<> Norm(percent_ave, percent_ave/3);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+
+    for(int i = 1; i < Solving_Metod::Count_Parallel_Stream; i++){
+        double perc = Norm(gen);
+        starts[i].Random_Binary(perc);
+    }
+
+
+    auto rand_start = [] (const Backpack& quest, const Vector& start, Vector& total, int& cost){
+        total = Solving_Metod::Best_Improvement::Hill_Climbing(quest, start);
+        cost = quest.Cost_Finction(total);
+    };
+
+    std::vector<std::thread> threads;
+
+    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
+        threads.emplace_back(rand_start, std::ref(quest), std::ref(starts[i]), std::ref(ans[i]), std::ref(costs[i]));
+    
+    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
+        threads[i].join();
+    
+    int max_i = 0;
+    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
+        if(costs[max_i] < costs[i])
+            max_i = i;
+    
+    return ans[max_i];
+}

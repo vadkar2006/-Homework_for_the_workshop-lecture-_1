@@ -91,7 +91,20 @@ int Backpack::Cost_Finction(const Vector& items_vector) const{
         return Max_Volume - volume;
     return cost;
 }
-
+int Backpack::Max_Volume_Item_Index() const{
+    int maxx_i = 0;
+    for(int i = 0; i < this -> Get_Count_Items(); i++)
+        if(this -> Y(i) > this -> Y(maxx_i))
+            maxx_i = i;
+    return maxx_i;
+}
+int Backpack::Min_Volume_Item_Index() const{
+    int minn_i = 0;
+    for(int i = 0; i < this -> Get_Count_Items(); i++)
+        if(this -> Y(i) < this -> Y(minn_i))
+            minn_i = i;
+    return minn_i;
+}
 
 Vector Backpack::Solve(Vector (&f)(const Backpack&, const Vector&), const Vector& start) const{
     Vector total = f(*this, start);

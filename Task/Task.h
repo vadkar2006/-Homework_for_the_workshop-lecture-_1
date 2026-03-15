@@ -67,6 +67,8 @@ public:
 
     int Cost_Finction(const Vector& items_vector) const;
     int Volume_Finction(const Vector& items_vector) const;
+    int Max_Volume_Item_Index() const;
+    int Min_Volume_Item_Index() const;
     bool Input(std::ifstream& input);
 
 

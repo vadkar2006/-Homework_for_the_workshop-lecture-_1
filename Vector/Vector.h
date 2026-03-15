@@ -19,15 +19,17 @@ public:
     int Dim() const {return len;}
 
     void Print() const;
-
+    void Random_Binary(double Percentage_Units);
 
     Vector Slice(int start, int end, bool inversion = false) const;
     Vector Concatenation(const Vector& vec1) const;
+    
+
 
     int& operator[] (int i);
     const int& operator[] (int i) const;
 
     bool operator = (const Vector& vec);
 
-    ~Vector(){delete[] vector;}
+    ~Vector(){if(vector) delete[] vector;}
 };
