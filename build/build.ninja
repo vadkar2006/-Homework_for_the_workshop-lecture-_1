@@ -105,6 +105,7 @@ build CMakeFiles/MyApp.dir/Solving_Metod/Solving_Metod.cpp.obj: CXX_COMPILER__My
 build MyApp.exe: CXX_EXECUTABLE_LINKER__MyApp_Debug CMakeFiles/MyApp.dir/main.cpp.obj CMakeFiles/MyApp.dir/Test/Test.cpp.obj CMakeFiles/MyApp.dir/Vector/Vector.cpp.obj CMakeFiles/MyApp.dir/Task/Task.cpp.obj CMakeFiles/MyApp.dir/Solving_Metod/Solving_Metod.cpp.obj
   CONFIG = Debug
   FLAGS = -g
+  LINK_FLAGS = -static
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\MyApp.dir
   POST_BUILD = cd .

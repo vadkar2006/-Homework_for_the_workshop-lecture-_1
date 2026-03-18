@@ -8,11 +8,12 @@
 
 namespace Solving_Metod{
 
-    static int Count_Parallel_Stream = 4;
+    static int Count_Parallel_Stream = 16;
 
     namespace Parallel_Random_Start{
         Vector Hill_Climbing(const Backpack& quest, const Vector& start);
 
+        Vector _2_3_Optimization(const TSP& quest, const Vector& start);
     }
 
 

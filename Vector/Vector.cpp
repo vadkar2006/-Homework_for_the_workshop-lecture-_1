@@ -1,5 +1,7 @@
 #include <iostream>
 #include <random>
+#include <algorithm>
+
 
 #include "Vector.h"
 
@@ -99,6 +101,15 @@ void Vector::Random_Binary(double Percentage_Units){
             vector[i] = 1;
     }
 }
+void Vector::Random_Mixing() {
+    if (len < 2 || vector == nullptr)
+        return;
+    
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::shuffle(vector, vector + len, gen);
+}
 
 int& Vector::operator[] (int i){
     return vector[i];
@@ -123,3 +134,13 @@ bool Vector::operator = (const Vector& vec){
     
     return true;
 }
+
+
+std::ostream& operator << (std::ostream& output, const Vector& vec){
+    for(int i = 0; i < vec.Len(); i++)
+        output << vec.vector[i] << " ";
+    output << std::endl;
+
+    return output;
+}
+

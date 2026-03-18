@@ -12,6 +12,8 @@ add_executable(MyApp
     Solving_Metod/Solving_Metod.cpp
 )
 
+target_link_options(MyApp PRIVATE -static)
+
 # Папка include уже подключена (из вашего лога)
 target_include_directories(MyApp PRIVATE ${CMAKE_SOURCE_DIR}/include)
 

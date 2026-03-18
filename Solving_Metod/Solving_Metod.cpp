@@ -10,16 +10,19 @@ Vector Solving_Metod::Best_Improvement::Hill_Climbing (const Backpack& quest, co
     total = start;
 
     int total_cost = quest.Cost_Finction(total);
+    int best_index = -1;
+    int best_cost = total_cost;
+    int new_cost;
 
     bool flag = true;
     while (flag){
-        int best_index = -1;
-        int best_cost = total_cost;
+        best_index = -1;
+        best_cost = total_cost;
 
         for(int i = 0; i < total.Dim(); i++){
             total[i] = !total[i];
 
-            int new_cost = quest.Cost_Finction(total);
+            new_cost = quest.Cost_Finction(total);
         
             if(new_cost > best_cost){
                 best_index = i;
@@ -275,4 +278,40 @@ Vector Solving_Metod::Parallel_Random_Start::Hill_Climbing(const Backpack& quest
             max_i = i;
     
     return ans[max_i];
+}
+
+Vector Solving_Metod::Parallel_Random_Start::_2_3_Optimization(const TSP& quest, const Vector& start){
+    std::vector<Vector> starts (Solving_Metod::Count_Parallel_Stream, Vector(quest.Get_Count_Point(), "range"));
+    std::vector<Vector> ans_1 (Solving_Metod::Count_Parallel_Stream);
+    std::vector<Vector> ans (Solving_Metod::Count_Parallel_Stream);
+    std::vector<int> costs (Solving_Metod::Count_Parallel_Stream);
+
+    starts[0] = start;
+
+
+    for(int i = 1; i < Solving_Metod::Count_Parallel_Stream; i++)
+        starts[i].Random_Mixing();   
+
+
+    auto rand_start = [] (const TSP& quest, const Vector& start, Vector& total_1, Vector& total, int& cost){
+        total_1 = Solving_Metod::Best_Improvement::_2_Optimization(quest, start);
+        total = Solving_Metod::Best_Improvement::_3_Optimization(quest, total_1);   
+
+        cost = quest.Cost_Finction(total);
+    };
+
+    std::vector<std::thread> threads;
+
+    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
+        threads.emplace_back(rand_start, std::ref(quest), std::ref(starts[i]), std::ref(ans_1[i]), std::ref(ans[i]), std::ref(costs[i]));
+    
+    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
+        threads[i].join();
+    
+    int min_i = 0;
+    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
+        if(costs[min_i] > costs[i])
+            min_i = i;
+    
+    return ans[min_i];
 }

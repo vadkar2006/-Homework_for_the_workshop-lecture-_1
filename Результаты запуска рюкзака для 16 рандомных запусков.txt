@@ -9,9 +9,9 @@ Benefit: 12165
 Vector_Things: 0 0 0 1 0 0 0 0 0 0 1 0 1 1 0 0 0 1 0
 
 Problem 3
-Benefit: 99753
-99757 of 100000 weights used
-Vector_Things: 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+Benefit: 99798
+99846 of 100000 weights used
+Vector_Things: 0 0 1 0 1 0 1 0 1 0 1 0 1 0 0 0 1 0 1 0 1 0 0 0 0 0 0 0 0 0
 
 Problem 4
 Benefit: 99924

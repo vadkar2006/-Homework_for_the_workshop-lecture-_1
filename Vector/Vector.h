@@ -2,6 +2,7 @@
 
 #include <string>
 
+
 class Vector{
     int len = 0;
     int* vector = nullptr;
@@ -20,6 +21,7 @@ public:
 
     void Print() const;
     void Random_Binary(double Percentage_Units);
+    void Random_Mixing();
 
     Vector Slice(int start, int end, bool inversion = false) const;
     Vector Concatenation(const Vector& vec1) const;
@@ -31,5 +33,10 @@ public:
 
     bool operator = (const Vector& vec);
 
+    friend std::ostream& operator << (std::ostream& output, const Vector& vec);
+
+
     ~Vector(){if(vector) delete[] vector;}
 };
+
+
