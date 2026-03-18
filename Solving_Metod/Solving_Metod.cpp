@@ -233,24 +233,19 @@ Vector Solving_Metod::Parallel_Random_Start::Hill_Climbing(const Backpack& quest
 
     starts[0] = start;
 
-    double min_vol_count = double(quest.Get_Max_Volume()) / double(quest.Y(quest.Max_Volume_Item_Index()));
-    double max_vol_count = double(quest.Get_Max_Volume()) / double(quest.Y(quest.Min_Volume_Item_Index()));
-
     long sum = 0;
     for(int i = 0; i < quest.Get_Count_Items(); i++)
         sum += quest.Y(i);
     
     double average_count = double(quest.Get_Max_Volume()) / (sum / double(quest.Get_Count_Items()));
 
-    double percent_min = min_vol_count / quest.Get_Count_Items() * 100;
     double percent_ave = average_count / quest.Get_Count_Items() * 100;
-    double percent_max = max_vol_count / quest.Get_Count_Items() * 100;
 
-    if(percent_max > 100)
-        percent_max = 100;
+    if(percent_ave > 100)
+        percent_ave = 100;
 
 
-    std::normal_distribution<> Norm(percent_ave, percent_ave/3);
+    std::normal_distribution<> Norm(percent_ave, percent_ave * (100 - percent_ave) / 1000);
     std::random_device rd;
     std::mt19937 gen(rd());
 

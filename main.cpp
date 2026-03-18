@@ -86,7 +86,7 @@ void Test_Data_Backpack(){
     std::cout << std::endl;
 
     std::cout << "Problem 18" << std::endl;
-    Solve_Backpack_Problem("ks_10000_0", Solving_Metod::Best_Improvement::Hill_Climbing);
+    Solve_Backpack_Problem("ks_10000_0", Solving_Metod::Parallel_Random_Start::Hill_Climbing);
     std::cout << std::endl;
 }
 
