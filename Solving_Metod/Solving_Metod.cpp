@@ -248,7 +248,7 @@ Vector Solving_Metod::Parallel_Random_Start::Hill_Climbing(const Backpack& quest
         percent_ave = 100;
 
 
-    std::normal_distribution<> Norm(percent_ave, percent_ave * (100 - percent_ave) / 1000);
+    std::normal_distribution<> Norm(percent_ave, percent_ave * (100 - percent_ave) / 100);
     std::random_device rd;
     std::mt19937 gen(rd());
 

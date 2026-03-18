@@ -93,12 +93,12 @@ void Vector::Random_Binary(double Percentage_Units){
 
     for(int i = 0; i < len; i++)
         vector[i] = dist_int(gen);
-    
+
     for(int i = 0; i < len; i++){
         if(vector[i] <= Percentage_Units)
-            vector[i] = 0;
-        else
             vector[i] = 1;
+        else
+            vector[i] = 0;
     }
 }
 void Vector::Random_Mixing() {

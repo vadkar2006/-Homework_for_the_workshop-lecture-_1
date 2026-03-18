@@ -223,11 +223,18 @@ void Test_Data_TSP(){
 
 
 int main(){
-    //Test_Data_Backpack();
-    Test_Data_TSP();
+    Test_Data_Backpack();
+    //Test_Data_TSP();
 
-    int x;
-    std::cout << x;
+
+    /*
+    std::ifstream file("../Data/data_1/ks_10000_0");
+    Backpack back(file);
+
+    Vector start(back.Get_Count_Items());
+    start.Random_Binary(0.006);
+    back.Solve(Solving_Metod::Best_Improvement::Hill_Climbing, start);*/
+    
     return 0;
 }
 
