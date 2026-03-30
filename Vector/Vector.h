@@ -20,7 +20,7 @@ public:
     int Dim() const {return len;}
 
     void Print() const;
-    Vector& Random_Binary(double Percentage_Units);
+    void Random_Binary(double Percentage_Units);
     void Random_Mixing();
 
     Vector Slice(int start, int end, bool inversion = false) const;

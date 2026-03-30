@@ -21,3 +21,18 @@ void Solve_Backpack_Problem(std::string input, Vector (&f)(const Backpack&, cons
     Vector resh = quest.Solve(f);
 }
 
+
+
+void Solve_TSP_Problem(std::string input, Vector (&f)(const TSP&, const Vector&)){
+    std::string way("../Data/data_2/");
+
+    std::ifstream file(way + input);
+    if(!file.is_open()){
+        std::cout << "Not Open file " << input << " for way " << way + input << std::endl;
+        return;
+    }
+
+    TSP quest(file);
+
+    Vector resh = quest.Solve(f);
+}

@@ -10,19 +10,26 @@ namespace Solving_Metod{
 
     static int Count_Parallel_Stream = 16;
 
-    static int Count_Generations = 50;
-    static int Count_Representatives = 500;
-    static int Count_Immigrant = Count_Representatives / 10;
+    namespace Parallel_Random_Start{
+        Vector Hill_Climbing(const Backpack& quest, const Vector& start);
 
-    namespace Genetic_Algorithm{
-        Vector Slice(const Backpack& quest, const Vector& start);
-
-        Vector Parallel_Slice(const Backpack& quest, const Vector& start);
+        Vector _2_3_Optimization(const TSP& quest, const Vector& start);
     }
 
-    namespace Branch_And_Bound{
-        Vector Priority_Queue(const Backpack& quest, const Vector& start);
-        Vector Queue(const Backpack& quest, const Vector& start);
-        Vector Stack(const Backpack& quest, const Vector& start);
+
+
+
+    namespace Best_Improvement{
+        Vector Hill_Climbing(const Backpack& quest, const Vector& start);
+
+
+        Vector _2_Optimization (const TSP& quest, const Vector& start);
+        Vector _3_Optimization (const TSP& quest, const Vector& start);
+
+        Vector _2_3_Optimization (const TSP& quest, const Vector& start);
+    }
+
+    namespace First_Improvement{
+        Vector _3_Optimization (const TSP& quest, const Vector& start);
     }
 }
