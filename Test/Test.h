@@ -11,4 +11,3 @@
 void Solve_Backpack_Problem(std::string input, Vector (&f)(const Backpack&, const Vector&));
 
 
-void Solve_TSP_Problem(std::string input, Vector (&f)(const TSP&, const Vector&));

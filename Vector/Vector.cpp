@@ -34,6 +34,8 @@ Vector::Vector(Vector&& vec) noexcept {
     vec.len = 0;
 }
 Vector::Vector(const Vector& vec){
+    
+
     if (!((vec.len > 0) && vec.vector))
         return;
 
@@ -81,7 +83,7 @@ Vector Vector::Concatenation(const Vector& vec1) const{
     
     return con;
 }
-void Vector::Random_Binary(double Percentage_Units){
+Vector& Vector::Random_Binary(double Percentage_Units){
     std::uniform_int_distribution<> dist_int(0, 1000000);
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -89,7 +91,7 @@ void Vector::Random_Binary(double Percentage_Units){
     Percentage_Units *= 10000; 
 
     if(!vector) 
-        return;
+        return *this;
 
     for(int i = 0; i < len; i++)
         vector[i] = dist_int(gen);
@@ -100,6 +102,8 @@ void Vector::Random_Binary(double Percentage_Units){
         else
             vector[i] = 0;
     }
+
+    return *this;
 }
 void Vector::Random_Mixing() {
     if (len < 2 || vector == nullptr)

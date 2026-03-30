@@ -1,317 +1,294 @@
 #include <iostream>
 #include <thread>
 #include <random>
+#include <algorithm>
+#include <queue>
+#include <stack>
 
 #include "Solving_Metod.h"
 
 
-Vector Solving_Metod::Best_Improvement::Hill_Climbing (const Backpack& quest, const Vector& start){
-    Vector total;
-    total = start;
 
-    int total_cost = quest.Cost_Finction(total);
-    int best_index = -1;
-    int best_cost = total_cost;
-    int new_cost;
-
-    bool flag = true;
-    while (flag){
-        best_index = -1;
-        best_cost = total_cost;
-
-        for(int i = 0; i < total.Dim(); i++){
-            total[i] = !total[i];
-
-            new_cost = quest.Cost_Finction(total);
-        
-            if(new_cost > best_cost){
-                best_index = i;
-                best_cost = new_cost;
-            }
-
-            total[i] = !total[i];
-        }
-
-        if(best_index == -1)
-            flag = false;
-        else{
-            total[best_index] = !total[best_index];
-            total_cost = best_cost;
-        }
-    }
-
-    return total;
-}
-
-
-Vector Solving_Metod::Best_Improvement::_2_Optimization (const TSP& quest, const Vector& start){
-    Vector total;
-    total = start;
-
-    double total_cost = quest.Cost_Finction(total);
-
-    bool flag = true;
-    while (flag){
-        bool best = false;
-        double best_cost = total_cost;
-        Vector best_total;
-
-        for(int i = 0; i < total.Dim() - 1; i++)
-            for(int j = i + 2; j < total.Dim(); j++){
-                Vector first = total.Slice(0, i);
-                Vector second = total.Slice(i, j, true);
-                Vector third = total.Slice(j, total.Dim());
-
-                Vector new_total = first.Concatenation(second.Concatenation(third));
-                double new_cost = quest.Cost_Finction(new_total);
-
-                if(new_cost < best_cost){
-                    best = true;
-                    best_cost = new_cost;
-                    best_total = new_total;
-                }
-            }
-        
-        if(!best)
-            flag = false;
-        else{
-            total = best_total;
-            total_cost = best_cost;
-        }
-    }
-
-    return total;
-}
-
-Vector Solving_Metod::Best_Improvement::_3_Optimization (const TSP& quest, const Vector& start){
-    Vector total;
-    total = start;
-
-    double total_cost = quest.Cost_Finction(total);
-
-    bool flag = true;
-    while (flag){
-        bool best = false;
-        double best_cost = total_cost;
-        Vector best_total;
-
-        for(int i = 0; i < total.Dim(); i++)
-            for(int j = i + 2; j < total.Dim(); j++)
-                for(int k = j + 2; k < total.Dim(); k++){
-                    Vector first = total.Slice(0, i);
-                    Vector second = total.Slice(i, j);
-                    Vector third = total.Slice(j, k);
-                    Vector fourth = total.Slice(k, total.Dim());
-
-                    Vector second_inv = total.Slice(i, j, true);
-                    Vector third_inv = total.Slice(i, k, true);
-
-
-                    Vector new_total_1 = first.Concatenation(second_inv.Concatenation(third.Concatenation(fourth)));
-                    Vector new_total_2 = first.Concatenation(second.Concatenation(third_inv.Concatenation(fourth)));
-                    Vector new_total_3 = first.Concatenation(third.Concatenation(second.Concatenation(fourth)));
-                    Vector new_total_4 = first.Concatenation(third_inv.Concatenation(second.Concatenation(fourth)));
-                    Vector new_total_5 = first.Concatenation(third.Concatenation(second_inv.Concatenation(fourth)));
-
-                    double new_cost_1 = quest.Cost_Finction(new_total_1);
-                    double new_cost_2 = quest.Cost_Finction(new_total_2);
-                    double new_cost_3 = quest.Cost_Finction(new_total_3);
-                    double new_cost_4 = quest.Cost_Finction(new_total_4);
-                    double new_cost_5 = quest.Cost_Finction(new_total_5);
-
-                    if(new_cost_1 < best_cost){
-                        best = true;
-                        best_cost = new_cost_1;
-                        best_total = new_total_1;
-                    }
-                    if(new_cost_2 < best_cost){
-                        best = true;
-                        best_cost = new_cost_2;
-                        best_total = new_total_2;
-                    }
-                    if(new_cost_3 < best_cost){
-                        best = true;
-                        best_cost = new_cost_3;
-                        best_total = new_total_3;
-                    }
-                    if(new_cost_4 < best_cost){
-                        best = true;
-                        best_cost = new_cost_4;
-                        best_total = new_total_4;
-                    }
-                    if(new_cost_5 < best_cost){
-                        best = true;
-                        best_cost = new_cost_5;
-                        best_total = new_total_5;
-                    }
-                }
-        
-        if(!best)
-            flag = false;
-        else{
-            total = best_total;
-            total_cost = best_cost;
-        }
-    }
-
-    return total;
-}
-
-Vector Solving_Metod::Best_Improvement::_2_3_Optimization(const TSP& quest, const Vector& start){
-    Vector first = Solving_Metod::Best_Improvement::_2_Optimization(quest, start);
-
-    Vector end = Solving_Metod::Best_Improvement::_3_Optimization(quest, first);
-
-    return end;
-}
-
-
-Vector Solving_Metod::First_Improvement::_3_Optimization (const TSP& quest, const Vector& start){
-    Vector total;
-    total = start;
-
-    double total_cost = quest.Cost_Finction(total);
-
-    bool flag = true;
-    while (flag){
-
-        bool flag1 = true;
-        for(int i = 0; (i < total.Dim()) && flag1; i++)
-            for(int j = i + 2; (j < total.Dim()) && flag1; j++)
-                for(int k = j + 2; (k < total.Dim()) && flag1; k++){
-                    Vector first = total.Slice(0, i);
-                    Vector second = total.Slice(i, j);
-                    Vector third = total.Slice(j, k);
-                    Vector fourth = total.Slice(k, total.Dim());
-
-                    Vector second_inv = total.Slice(i, j, true);
-                    Vector third_inv = total.Slice(i, k, true);
-
-                    std::vector<Vector> mas_vec(5);
-                    mas_vec[0] = first.Concatenation(second_inv.Concatenation(third.Concatenation(fourth)));
-                    mas_vec[1] = first.Concatenation(second.Concatenation(third_inv.Concatenation(fourth)));
-                    mas_vec[2] = first.Concatenation(third.Concatenation(second.Concatenation(fourth)));
-                    mas_vec[3] = first.Concatenation(third_inv.Concatenation(second.Concatenation(fourth)));
-                    mas_vec[4] = first.Concatenation(third.Concatenation(second_inv.Concatenation(fourth)));
-
-                    std::vector<double> mas_cost(5);
-                    mas_cost[0] = quest.Cost_Finction(mas_vec[0]);
-                    mas_cost[1] = quest.Cost_Finction(mas_vec[1]);
-                    mas_cost[2] = quest.Cost_Finction(mas_vec[2]);
-                    mas_cost[3] = quest.Cost_Finction(mas_vec[3]);
-                    mas_cost[4] = quest.Cost_Finction(mas_vec[4]);
-
-                    double min_cost = mas_cost[0];
-                    int q = 0;
-                    for(int i = 1; i < 5; i++)
-                        if(min_cost > mas_cost[i]){
-                            min_cost = mas_cost[i];
-                            q = i;
-                        }
-                    
-                    if(min_cost < total_cost){
-                        total = mas_vec[q];
-                        total_cost = mas_cost[q];
-
-                        flag1 = false;
-                    }
-                        
-                }
-        //std::cout << total_cost << std::endl;
-
-        if(flag1)
-            flag = false;
-    }
-
-    return total;
-}
-
-
-
-
-Vector Solving_Metod::Parallel_Random_Start::Hill_Climbing(const Backpack& quest, const Vector& start){
-    std::vector<Vector> starts (Solving_Metod::Count_Parallel_Stream, Vector(quest.Get_Count_Items()));
-    std::vector<Vector> ans (Solving_Metod::Count_Parallel_Stream);
-    std::vector<int> costs (Solving_Metod::Count_Parallel_Stream);
-
-    starts[0] = start;
-
-    long sum = 0;
-    for(int i = 0; i < quest.Get_Count_Items(); i++)
-        sum += quest.Y(i);
-    
-    double average_count = double(quest.Get_Max_Volume()) / (sum / double(quest.Get_Count_Items()));
-
-    double percent_ave = average_count / quest.Get_Count_Items() * 100;
-
-    if(percent_ave > 100)
-        percent_ave = 100;
-
-
-    std::normal_distribution<> Norm(percent_ave, percent_ave * (100 - percent_ave) / 100);
+Vector Solving_Metod::Genetic_Algorithm::Slice(const Backpack& quest, const Vector& start){
+    std::uniform_int_distribution<> population_percent(0, 100);
+    std::uniform_int_distribution<> random_representatives(0, Count_Representatives - 1);
+    std::uniform_int_distribution<> random_gap(1, quest.Get_Count_Items() - 2);
     std::random_device rd;
     std::mt19937 gen(rd());
 
+    std::vector<Vector> population_old(Count_Representatives, start);
+    std::vector<Vector> population_new(2*Count_Representatives + Count_Immigrant);
 
-    for(int i = 1; i < Solving_Metod::Count_Parallel_Stream; i++){
-        double perc = Norm(gen);
-        starts[i].Random_Binary(perc);
+
+    for(int i = 1; i < Count_Representatives; i++)
+        population_old[i] = Vector(quest.Get_Count_Items()).Random_Binary(population_percent(gen));
+    
+
+    for(int p = 0; p < Count_Generations; p++){
+        for(int i = 0; i < Count_Representatives; i++){
+            int gap = random_gap(gen);
+            int k1 = random_representatives(gen);
+            int k2 = random_representatives(gen);
+
+            population_new[i] = (population_old[k1].Slice(0, gap)).Concatenation(population_old[k2].Slice(gap, quest.Get_Count_Items()));
+        }
+
+        for(int i = Count_Representatives; i < 2*Count_Representatives; i++)
+            population_new[i] = population_old[i - Count_Representatives];
+
+        for(int i = 2*Count_Representatives; i < 2*Count_Representatives + Count_Immigrant; i++){
+            int k = random_representatives(gen) / 10;
+            population_new[i] = Vector(population_old[k]);
+            population_new[i].Random_Mixing();
+        }
+
+        std::sort(population_new.begin(), population_new.end(), [&quest](const Vector& a, const Vector& b) {
+                return quest.Cost_Finction(a) > quest.Cost_Finction(b);
+            });
+        
+        for(int i = 0; i < Count_Representatives; i++)
+            population_old[i] = population_new[i];
+    }
+
+    return population_old[0];
+}
+
+
+Vector Solving_Metod::Genetic_Algorithm::Parallel_Slice(const Backpack& quest, const Vector& start){
+    std::uniform_int_distribution<> population_percent(0, 100);
+    std::uniform_int_distribution<> random_representatives(0, Count_Representatives - 1);
+    std::uniform_int_distribution<> random_gap(1, quest.Get_Count_Items() - 2);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::vector<Vector> population_old(Count_Representatives, start);
+    std::vector<Vector> population_new(2*Count_Representatives + Count_Immigrant);
+
+
+    for(int i = 1; i < Count_Representatives; i++)
+        population_old[i] = Vector(quest.Get_Count_Items()).Random_Binary(population_percent(gen));
+    
+
+    int partition = Count_Representatives / Count_Parallel_Stream;
+    int over_count = Count_Representatives % Count_Parallel_Stream;
+
+    int migration_rasp = Count_Immigrant / Count_Parallel_Stream;
+    int over_count_migration = Count_Immigrant % Count_Parallel_Stream;
+
+
+
+    std::vector<std::thread> threads(Count_Parallel_Stream);
+    std::vector<std::vector<int>> seed_whirlpool_of_birth(3, std::vector<int>(Count_Representatives));
+    std::vector<int> seed_migration(Count_Immigrant);
+
+    auto whirlpool_of_birth = [&] (int start, int end){
+        for(int i = start; i < end; i++){
+            int gap = seed_whirlpool_of_birth[0][i];
+            int k1 = seed_whirlpool_of_birth[1][i];
+            int k2 = seed_whirlpool_of_birth[2][i];
+
+            population_new[i] = (population_old[k1].Slice(0, gap)).Concatenation(population_old[k2].Slice(gap, quest.Get_Count_Items()));
+        }
+
+        for(int i = start + Count_Representatives; i < end + Count_Representatives; i++)
+            population_new[i] = population_old[i - Count_Representatives];
+    };
+    auto migration = [&] (int start, int end){
+        for(int i = start + 2*Count_Representatives; i < end + 2*Count_Representatives; i++){
+            int k = seed_migration[i - 2*Count_Representatives];
+            population_new[i] = Vector(population_old[k]);
+            population_new[i].Random_Mixing();
+        }
+    };
+
+
+
+    for(int p = 0; p < Count_Generations; p++){
+        for(int i = 0; i < Count_Representatives; i++){
+            seed_whirlpool_of_birth[0][i] = random_gap(gen);
+            seed_whirlpool_of_birth[1][i] = random_representatives(gen);
+            seed_whirlpool_of_birth[2][i] = random_representatives(gen);
+        }
+        for(int i = 0; i < Count_Immigrant; i++)
+            seed_migration[i] = random_representatives(gen);
+
+
+        for(int i = 0; i < over_count; i++)
+            threads[i] = std::thread(whirlpool_of_birth, i*(partition + 1), (i + 1)*(partition + 1));
+
+        for(int i = over_count; i < Count_Parallel_Stream; i++)
+            threads[i] = std::thread(whirlpool_of_birth, over_count*(partition + 1) + (i - over_count)*partition, over_count*(partition + 1) + (i - over_count + 1)*partition);
+        
+
+
+        for(int i = 0; i < over_count_migration; i++){
+            threads[i].join();
+            threads[i] = std::thread(migration, i*(migration_rasp + 1), (i + 1)*(migration_rasp + 1));
+        }
+
+
+        for(int i = over_count_migration; i < Count_Parallel_Stream; i++){
+            threads[i].join();
+            threads[i] = std::thread(migration, over_count_migration*(migration_rasp + 1) + (i - over_count_migration)*migration_rasp, over_count_migration*(migration_rasp + 1) + (i - over_count_migration + 1)*migration_rasp);
+        }
+
+
+        for(int i = 0; i < Count_Parallel_Stream; i++)
+            threads[i].join();
+/*
+        for(int i = 0; i < 2*Count_Representatives + Count_Immigrant; i++)
+            std::cout << i << "    " << population_new[i];*/
+
+        std::sort(population_new.begin(), population_new.end(), [&quest](const Vector& a, const Vector& b) {
+                return quest.Cost_Finction(a) > quest.Cost_Finction(b);
+            });
+        
+        for(int i = 0; i < Count_Representatives; i++)
+            population_old[i] = population_new[i];
     }
 
 
-    auto rand_start = [] (const Backpack& quest, const Vector& start, Vector& total, int& cost){
-        total = Solving_Metod::Best_Improvement::Hill_Climbing(quest, start);
-        cost = quest.Cost_Finction(total);
-    };
-
-    std::vector<std::thread> threads;
-
-    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
-        threads.emplace_back(rand_start, std::ref(quest), std::ref(starts[i]), std::ref(ans[i]), std::ref(costs[i]));
-    
-    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
-        threads[i].join();
-    
-    int max_i = 0;
-    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
-        if(costs[max_i] < costs[i])
-            max_i = i;
-    
-    return ans[max_i];
+    return population_old[0];
 }
 
-Vector Solving_Metod::Parallel_Random_Start::_2_3_Optimization(const TSP& quest, const Vector& start){
-    std::vector<Vector> starts (Solving_Metod::Count_Parallel_Stream, Vector(quest.Get_Count_Point(), "range"));
-    std::vector<Vector> ans_1 (Solving_Metod::Count_Parallel_Stream);
-    std::vector<Vector> ans (Solving_Metod::Count_Parallel_Stream);
-    std::vector<int> costs (Solving_Metod::Count_Parallel_Stream);
-
-    starts[0] = start;
 
 
-    for(int i = 1; i < Solving_Metod::Count_Parallel_Stream; i++)
-        starts[i].Random_Mixing();   
 
 
-    auto rand_start = [] (const TSP& quest, const Vector& start, Vector& total_1, Vector& total, int& cost){
-        total_1 = Solving_Metod::Best_Improvement::_2_Optimization(quest, start);
-        total = Solving_Metod::Best_Improvement::_3_Optimization(quest, total_1);   
+Vector Solving_Metod::Branch_And_Bound::Priority_Queue(const Backpack& quest, const Vector& start){
+    
+    struct Solution{
+        const Backpack* quest;
+        Vector sol_vec;
+        int cost;
+        int id_poz;
+    
+        Solution(const Backpack* quest1, const Vector& sol_vec1, int id_poz1): quest(quest1), sol_vec(sol_vec1), id_poz(id_poz1){cost = quest1 -> Cost_Finction(sol_vec1);}
 
-        cost = quest.Cost_Finction(total);
+        bool operator < (const Solution& sol11) const{return cost < sol11.cost;}
     };
 
-    std::vector<std::thread> threads;
+    std::priority_queue<Solution> queue_sol;
 
-    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
-        threads.emplace_back(rand_start, std::ref(quest), std::ref(starts[i]), std::ref(ans_1[i]), std::ref(ans[i]), std::ref(costs[i]));
+
+    Vector best_vector(quest.Get_Count_Items());
+    int best_cost = 0;
+
+    queue_sol.push(Solution(&quest, best_vector, 0));
     
-    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
-        threads[i].join();
+
+    while (queue_sol.size() > 0){
+        Solution sol = queue_sol.top();
+        queue_sol.pop();
+
+        if(best_cost < sol.cost){
+            best_vector = sol.sol_vec;
+            best_cost = sol.cost;
+        }
+
+        if(sol.id_poz < quest.Get_Count_Items()){
+            Solution sol1(&quest, sol.sol_vec, sol.id_poz + 1);
+            sol.sol_vec[sol.id_poz] = !sol.sol_vec[sol.id_poz];
+            Solution sol2(&quest, sol.sol_vec, sol.id_poz + 1);
+
+            if(sol1.cost >= 0)
+                queue_sol.push(sol1);
+
+            if(sol2.cost >= 0)
+                queue_sol.push(sol2);
+        }
+    }
     
-    int min_i = 0;
-    for(int i = 0; i < Solving_Metod::Count_Parallel_Stream; i++)
-        if(costs[min_i] > costs[i])
-            min_i = i;
-    
-    return ans[min_i];
+    return best_vector;
 }
+
+Vector Solving_Metod::Branch_And_Bound::Queue(const Backpack& quest, const Vector& start){
+    
+    struct Solution{
+        const Backpack* quest;
+        Vector sol_vec;
+        int cost;
+        int id_poz;
+    
+        Solution(const Backpack* quest1, const Vector& sol_vec1, int id_poz1): quest(quest1), sol_vec(sol_vec1), id_poz(id_poz1){cost = quest1 -> Cost_Finction(sol_vec1);}
+    };
+
+    std::queue<Solution> queue_sol;
+
+
+    Vector best_vector(quest.Get_Count_Items());
+    int best_cost = 0;
+
+    queue_sol.push(Solution(&quest, best_vector, 0));
+    
+
+    while (queue_sol.size() > 0){
+        Solution sol = queue_sol.front();
+        queue_sol.pop();
+
+        if(best_cost < sol.cost){
+            best_vector = sol.sol_vec;
+            best_cost = sol.cost;
+        }
+
+        if(sol.id_poz < quest.Get_Count_Items()){
+            Solution sol1(&quest, sol.sol_vec, sol.id_poz + 1);
+            sol.sol_vec[sol.id_poz] = !sol.sol_vec[sol.id_poz];
+            Solution sol2(&quest, sol.sol_vec, sol.id_poz + 1);
+
+            if(sol1.cost >= 0)
+                queue_sol.push(sol1);
+
+            if(sol2.cost >= 0)
+                queue_sol.push(sol2);
+        }
+    }
+    
+    return best_vector;
+}
+
+Vector Solving_Metod::Branch_And_Bound::Stack(const Backpack& quest, const Vector& start){
+    
+    struct Solution{
+        const Backpack* quest;
+        Vector sol_vec;
+        int cost;
+        int id_poz;
+    
+        Solution(const Backpack* quest1, const Vector& sol_vec1, int id_poz1): quest(quest1), sol_vec(sol_vec1), id_poz(id_poz1){cost = quest1 -> Cost_Finction(sol_vec1);}
+    };
+
+    std::stack<Solution> queue_sol;
+
+
+    Vector best_vector(quest.Get_Count_Items());
+    int best_cost = 0;
+
+    queue_sol.push(Solution(&quest, best_vector, 0));
+    
+
+    while (queue_sol.size() > 0){
+        Solution sol = queue_sol.top();
+        queue_sol.pop();
+
+        if(best_cost < sol.cost){
+            best_vector = sol.sol_vec;
+            best_cost = sol.cost;
+        }
+
+        if(sol.id_poz < quest.Get_Count_Items()){
+            Solution sol1(&quest, sol.sol_vec, sol.id_poz + 1);
+            sol.sol_vec[sol.id_poz] = !sol.sol_vec[sol.id_poz];
+            Solution sol2(&quest, sol.sol_vec, sol.id_poz + 1);
+
+            if(sol1.cost >= 0)
+                queue_sol.push(sol1);
+
+            if(sol2.cost >= 0)
+                queue_sol.push(sol2);
+        }
+    }
+    
+    return best_vector;
+}
+
